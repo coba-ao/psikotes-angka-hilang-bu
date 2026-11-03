@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tes Kecermatan Angka Hilang - BrainUp</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --maroon:#5D0000;
+    --maroon-deep:#3D0000;
+    --maroon-light:#7A1111;
+    --gold:#F4A259;
+    --gold-soft:#FFE8D0;
+    --gold-bright:#FFC080;
+    --bg-base:#FDFBF7;
+    --bg-soft:#F5ECE8;
+    --white:#FFFFFF;
+    --text:#1E1E1E;
+    --muted:#6B7280;
+    --border:#E5E7EB;
+    --success:#16A34A;
+    --success-soft:#DCFCE7;
+    --danger:#DC2626;
+    --danger-soft:#FEE2E2;
+  }
+  
+  body { 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+    background: var(--maroon); 
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(244,162,89,0.15) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(244,162,89,0.1) 0%, transparent 40%),
+      linear-gradient(135deg, #3D0000 0%, #5D0000 50%, #7A1111 100%);
+    color: var(--text); 
+    line-height: 1.6; 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  h1, h2, h3, h4 { 
+    font-family: 'Montserrat', sans-serif !important; 
+    font-weight: 900 !important; 
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+  }
+
+  /* HEADER */
+  .header { 
+    background: rgba(253, 251, 247, 0.97); 
+    backdrop-filter: blur(10px); 
+    padding: 15px 30px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 3px solid var(--gold); 
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .brand-wrapper { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand img { height: 45px; object-fit: contain; }
+  .tagline { display: flex; flex-direction: column; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.75rem; line-height: 1.3; border-left: 2px solid var(--gold); padding-left: 15px; }
+  .tagline span:first-child { font-weight: 800; color: var(--maroon); font-style: italic; }
+  .tagline span:last-child { font-weight: 600; color: var(--muted); letter-spacing: 0.5px; }
+  .btn-back { color: var(--maroon); font-weight: 700; text-decoration: none; font-size: 15px; transition: 0.3s; display: flex; align-items: center; gap: 6px; background: var(--bg-soft); padding: 8px 16px; border-radius: 8px; border: 1.5px solid transparent; }
+  .btn-back:hover { background: var(--maroon); color: #fff; border-color: var(--gold); transform: translateX(-3px); }
+
+  /* LAYOUT */
+  .main-layout {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    gap: 30px;
+  }
+
+  .side-banner {
+    flex: 1;
+    max-width: 400px;
+    border-radius: 20px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+    transition: background-image 0.5s ease-in-out;
+    border: 3px solid rgba(244,162,89,0.3);
+  }
+  .side-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(61,0,0,0.6), transparent);
+  }
+
+  .game-container-wrapper { 
+    flex: 0 0 100%;
+    max-width: 500px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+  }
+  
+  .app-container { 
+    width: 100%; 
+    background: var(--bg-base); 
+    border-radius: 24px; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(244,162,89,0.3); 
+    overflow: hidden; 
+    position: relative; 
+    border: 2px solid var(--gold);
+  }
+
+  .screen { display: none; padding: 25px 20px; animation: fadeIn 0.3s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* MENU */
+  .menu-title { 
+    text-align: center; 
+    font-size: 1.2rem; 
+    margin-bottom: 15px; 
+    color: var(--maroon); 
+    position: relative;
+    padding-bottom: 12px;
+  }
+  .menu-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    border-radius: 2px;
+  }
+  .time-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .time-btn { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 14px 20px; 
+    background: #fff; 
+    border: 2px solid var(--border); 
+    border-radius: 12px; 
+    cursor: pointer; 
+    transition: 0.2s; 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+    font-weight: 700; 
+    font-size: 1rem; 
+    color: var(--maroon);
+    position: relative;
+    overflow: hidden;
+  }
+  .time-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transition: 0.2s;
+  }
+  .time-btn:hover { 
+    border-color: var(--maroon); 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 15px rgba(93,0,0,0.15); 
+  }
+  .time-btn:hover::before { transform: scaleY(1); }
+  .time-btn .duration { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 900; }
+  .time-btn .label { font-size: 0.85rem; color: var(--muted); }
+  
+  .instruction-box { 
+    background: linear-gradient(135deg, #FFFBEB 0%, var(--gold-soft) 100%); 
+    border: 1.5px solid var(--gold); 
+    border-radius: 12px; 
+    padding: 14px; 
+    font-size: 0.8rem; 
+    color: #7A4A1A; 
+    line-height: 1.6; 
+    margin-bottom: 20px; 
+    text-align: center;
+    position: relative;
+  }
+  .instruction-box::before {
+    content: '💡';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+  }
+  
+  .btn-riwayat { 
+    width: 100%; 
+    padding: 12px; 
+    background: transparent; 
+    border: 2px solid var(--maroon); 
+    color: var(--maroon); 
+    border-radius: 12px; 
+    font-family: 'Outfit', sans-serif; 
+    font-weight: 800; 
+    font-size: 1rem; 
+    cursor: pointer; 
+    transition: 0.3s; 
+  }
+  .btn-riwayat:hover { background: var(--maroon); color: #fff; }
+
+  /* GAMEPLAY */
+  .game-topbar { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 15px; 
+    padding: 0 5px; 
+  }
+  .game-title { 
+    font-size: 0.75rem; 
+    font-weight: 800; 
+    color: var(--maroon); 
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.3px;
+  }
+  .timer-text { 
+    font-family: 'Outfit', sans-serif; 
+    font-size: 1.1rem; 
+    font-weight: 900; 
+    color: var(--maroon); 
+    background: var(--gold-soft);
+    padding: 4px 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--gold);
+  }
+  .timer-text.warning { 
+    color: #fff; 
+    background: var(--danger); 
+    border-color: var(--danger);
+    animation: pulse 1s infinite; 
+  }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+  /* PROGRESS BAR */
+  .progress-container { 
+    width: 100%; 
+    height: 10px; 
+    background: var(--bg-soft); 
+    border-radius: 5px; 
+    margin-bottom: 25px; 
+    overflow: hidden; 
+    border: 1px solid var(--gold);
+  }
+  .progress-bar { 
+    height: 100%; 
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-bright) 100%); 
+    width: 100%; 
+    transition: width 1s linear; 
+    border-radius: 5px;
+  }
+
+  /* KOTAK ACUAN */
+  .acuan-box {
+    display: flex;
+    background: linear-gradient(135deg, #fff 0%, #FFF9F0 100%);
+    border: 2px solid var(--maroon);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(93, 0, 0, 0.12);
+    margin-top: 5px; /* Beri jarak aman karena badge dihapus */
+  }
+  .acuan-col { flex: 1; text-align: center; border-right: 1px solid rgba(93,0,0,0.1); }
+  .acuan-col:last-child { border-right: none; }
+  .acuan-num { 
+    font-family: 'Outfit', sans-serif; 
+    font-size: 2rem; 
+    font-weight: 900; 
+    color: var(--maroon); 
+    padding: 18px 0 10px; 
+  }
+  .acuan-label { 
+    background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-light) 100%); 
+    color: var(--gold); 
+    font-weight: 800; 
+    font-size: 0.9rem; 
+    padding: 6px 0;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* KOTAK SOAL */
+  .soal-box {
+    background: linear-gradient(135deg, #fff 0%, #FFF9F0 100%);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 25px 20px 20px; /* Padding atas ditambah karena badge */
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(244, 162, 89, 0.15);
+    position: relative;
+    margin-top: 10px;
+  }
+  .soal-box::before {
+    content: 'SOAL';
+    position: absolute;
+    top: -12px; /* Dinaikkan sedikit agar tidak menimpa border */
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--maroon);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 900;
+    padding: 3px 14px;
+    border-radius: 6px;
+    letter-spacing: 2px;
+  }
+  .soal-title { 
+    color: var(--maroon); 
+    font-weight: 800; 
+    font-size: 0.75rem; 
+    margin-bottom: 15px; 
+    letter-spacing: 1px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .soal-numbers { display: flex; justify-content: center; gap: 10px; }
+  .soal-num {
+    width: 50px; height: 50px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 900; color: var(--maroon);
+    background: #fff; border: 2px solid var(--border); border-radius: 12px;
+    transition: 0.2s;
+  }
+  .soal-num.missing {
+    background: linear-gradient(135deg, var(--gold-soft) 0%, #FFD9B0 100%);
+    border: 2px dashed var(--gold);
+    color: var(--maroon);
+    animation: pulseMissing 1.5s infinite;
+    box-shadow: 0 0 0 0 rgba(244,162,89,0.4);
+  }
+  @keyframes pulseMissing {
+    0% { box-shadow: 0 0 0 0 rgba(244,162,89,0.5); }
+    70% { box-shadow: 0 0 0 10px rgba(244,162,89,0); }
+    100% { box-shadow: 0 0 0 0 rgba(244,162,89,0); }
+  }
+
+  /* KOTAK PILIHAN JAWABAN */
+  .pilihan-box {
+    background: linear-gradient(135deg, #fff 0%, #FFF9F0 100%);
+    border: 2px solid var(--maroon);
+    border-radius: 16px;
+    padding: 25px 20px 20px;
+    text-align: center;
+    position: relative;
+    margin-top: 10px;
+  }
+  .pilihan-box::before {
+    content: 'JAWABAN';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--maroon);
+    color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 900;
+    padding: 3px 14px;
+    border-radius: 6px;
+    letter-spacing: 2px;
+  }
+  .pilihan-title { 
+    color: var(--maroon); 
+    font-weight: 800; 
+    font-size: 0.75rem; 
+    margin-bottom: 15px; 
+    letter-spacing: 1px;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .pilihan-buttons { display: flex; justify-content: center; gap: 10px; }
+  
+  /* TOMBOL OPSI (TANPA ANIMASI GOYANG) */
+  .opt-btn {
+    width: 50px; height: 50px; border-radius: 50%;
+    border: 2px solid var(--gold); 
+    background: #fff;
+    font-family: 'Outfit', sans-serif; 
+    font-size: 1.2rem; 
+    font-weight: 900; 
+    color: var(--maroon);
+    cursor: pointer; 
+    transition: background 0.2s, border-color 0.2s, color 0.2s; /* Transisi halus tanpa transform */
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    position: relative;
+  }
+  .opt-btn:hover { 
+    background: var(--gold-soft); 
+    box-shadow: 0 4px 12px rgba(244,162,89,0.3);
+  }
+  .opt-btn.benar { 
+    background: var(--success-soft); 
+    border-color: var(--success); 
+    color: var(--success);
+  }
+  .opt-btn.salah { 
+    background: var(--danger-soft); 
+    border-color: var(--danger); 
+    color: var(--danger);
+    /* Animasi shake dihapus agar mata pengguna tetap fokus */
+  }
+
+  /* MODAL HASIL */
+  .modal-result { 
+    display: none; 
+    position: absolute; 
+    inset: 0; 
+    background: rgba(61,0,0,0.75); 
+    backdrop-filter: blur(8px); 
+    z-index: 100; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 20px; 
+  }
+  .modal-result.active { display: flex; }
+  .result-box { 
+    background: var(--bg-base); 
+    border-radius: 20px; 
+    padding: 25px; 
+    text-align: center; 
+    width: 100%; 
+    max-width: 320px; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 0 3px var(--gold); 
+    animation: popIn 0.3s; 
+  }
+  @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .result-box h2 { color: var(--maroon); margin-bottom: 5px; font-size: 1.3rem; }
+  .result-score { 
+    font-family: 'Outfit', sans-serif; 
+    font-size: 3rem; 
+    font-weight: 900; 
+    color: var(--maroon); 
+    line-height: 1; 
+    margin: 10px 0;
+    background: linear-gradient(135deg, var(--maroon) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .result-stats { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; font-size: 0.8rem; color: var(--muted); }
+  .result-stats span { font-weight: 800; color: var(--text); display: block; font-size: 1.1rem; }
+  .result-actions { display: flex; flex-direction: column; gap: 8px; }
+  .btn-play-again { 
+    padding: 12px; 
+    background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-light) 100%); 
+    color: #fff; 
+    border: none; 
+    border-radius: 10px; 
+    font-family: 'Outfit', sans-serif; 
+    font-weight: 800; 
+    font-size: 0.95rem; 
+    cursor: pointer; 
+    transition: 0.3s;
+  }
+  .btn-play-again:hover { 
+    background: linear-gradient(135deg, var(--maroon-light) 0%, var(--maroon) 100%);
+    box-shadow: 0 4px 15px rgba(93,0,0,0.3);
+  }
+  .btn-menu { 
+    padding: 12px; 
+    background: var(--bg-soft); 
+    color: var(--maroon); 
+    border: none; 
+    border-radius: 10px; 
+    font-family: 'Outfit', sans-serif; 
+    font-weight: 800; 
+    font-size: 0.95rem; 
+    cursor: pointer; 
+    transition: 0.3s;
+  }
+  .btn-menu:hover { background: #E0D0C8; }
+
+  /* RIWAYAT */
+  .history-list { max-height: 350px; overflow-y: auto; margin-bottom: 15px; padding-right: 5px; }
+  .history-item { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 12px; 
+    background: #fff; 
+    border-radius: 12px; 
+    margin-bottom: 8px; 
+    border: 1.5px solid var(--border);
+    border-left: 4px solid var(--gold);
+  }
+  .history-info .h-date { font-size: 0.7rem; color: var(--muted); }
+  .history-info .h-type { font-weight: 800; font-size: 0.8rem; color: var(--maroon); text-transform: uppercase; }
+  .history-score { 
+    font-family: 'Outfit', sans-serif; 
+    font-size: 1.4rem; 
+    font-weight: 900; 
+    color: var(--maroon); 
+  }
+  .history-empty { text-align: center; color: var(--muted); padding: 30px 0; font-size: 0.85rem; }
+  .btn-back-menu { 
+    width: 100%; 
+    padding: 12px; 
+    background: linear-gradient(135deg, var(--maroon) 0%, var(--maroon-light) 100%); 
+    color: #fff; 
+    border: none; 
+    border-radius: 12px; 
+    font-family: 'Outfit', sans-serif; 
+    font-weight: 800; 
+    font-size: 0.95rem; 
+    cursor: pointer; 
+    transition: 0.3s;
+  }
+  .btn-back-menu:hover { box-shadow: 0 4px 15px rgba(93,0,0,0.3); }
+
+  /* FOOTER */
+  footer { 
+    background: linear-gradient(135deg, var(--maroon-deep) 0%, var(--maroon) 100%); 
+    color: #fff; 
+    padding: 25px 20px 15px; 
+    text-align: center; 
+    position: relative; 
+    z-index: 10; 
+    border-top: 3px solid var(--gold);
+  }
+  .footer-content p { color: #E5D5D5; font-size: 0.8rem; margin-bottom: 5px; }
+  
+  .float-wa { 
+    position: fixed; 
+    bottom: 30px; 
+    right: 30px; 
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); 
+    color: white; 
+    width: 55px; 
+    height: 55px; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 0 10px 25px rgba(37,211,102,0.4); 
+    z-index: 999; 
+    transition: 0.3s; 
+    cursor: pointer; 
+    border: 3px solid var(--gold); 
+    text-decoration: none;
+  }
+  .float-wa:hover { transform: scale(1.1) rotate(10deg); }
+  .float-wa svg { width: 30px; height: 30px; fill: currentColor; }
+
+  /* MODAL WA */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(61,0,0,0.75); backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.active { display: flex; }
+  .modal-box { 
+    background: var(--bg-base); 
+    border-radius: 24px; 
+    width: 100%; 
+    max-width: 450px; 
+    padding: 35px 30px; 
+    text-align: left; 
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 3px var(--gold); 
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+  }
+  .modal-box h3 { text-align: center; font-size: 1.5rem; margin-bottom: 10px; color: var(--maroon);}
+  .modal-box p { text-align: center; font-size: 0.95rem; color: var(--muted); margin-bottom: 25px; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 5px; color: var(--maroon); }
+  .form-group input, .form-group select { width: 100%; padding: 12px 15px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.95rem; background: #F9FAFB; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s;}
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--maroon); background: #fff; box-shadow: 0 0 0 3px rgba(244,162,89,0.2);}
+  .btn-wa-kirim { 
+    display: block; 
+    width: 100%; 
+    padding: 15px; 
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); 
+    color: #fff; 
+    border: none; 
+    border-radius: 12px; 
+    font-weight: 800; 
+    font-size: 1rem; 
+    cursor: pointer; 
+    margin-top: 15px; 
+    text-align: center; 
+    font-family: 'Outfit', sans-serif; 
+    transition: 0.3s;
+  }
+  .btn-wa-kirim:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,211,102,0.4); }
+  .btn-tutup { background: transparent; color: #9CA3AF; border: none; font-size: 0.95rem; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.3s; width: 100%; text-align: center; }
+  .btn-tutup:hover { color: var(--maroon); }
+
+  @media (max-width: 1100px) {
+    .side-banner { display: none; }
+    .game-container-wrapper { flex: 1; }
+  }
+
+  @media (max-width: 480px) {
+    .header { padding: 12px 15px; }
+    .brand img { height: 35px; }
+    .tagline { display: none; }
+    .screen { padding: 20px 15px; }
+    .acuan-num { font-size: 1.6rem; padding: 15px 0 8px; }
+    .acuan-label { font-size: 0.8rem; }
+    .soal-num { width: 42px; height: 42px; font-size: 1.3rem; }
+    .opt-btn { width: 42px; height: 42px; font-size: 1rem; }
+    .float-wa { width: 50px; height: 50px; bottom: 20px; right: 20px; }
+    .float-wa svg { width: 28px; height: 28px;}
+    .modal-box { padding: 25px 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="https://web-awal-brainup.vercel.app/" class="brand-wrapper">
+      <div class="brand">
+        <img src="https://i.imgur.com/VXUBgjD.png" alt="Logo BrainUp">
+      </div>
+      <div class="tagline">
+        <span>#Jangan Panik!</span>
+        <span>BrainUp Punya Taktik</span>
+      </div>
+    </a>
+   <a href="https://web-awal-brainup.vercel.app/" class="btn-back">← Dashboard</a>
+  </div>
+
+  <div class="main-layout">
+    
+    <div class="side-banner" id="bannerLeft"></div>
+
+    <div class="game-container-wrapper">
+      <div class="app-container">
+        
+        <!-- SCREEN 1: MENU -->
+        <div id="screen-menu" class="screen active">
+          <h3 class="menu-title">Tes Kecermatan Angka Hilang</h3>
+          <div class="time-options">
+            <button class="time-btn" onclick="startGame(45)"><span class="duration">45 Detik</span><span class="label">Latihan Cepat</span></button>
+            <button class="time-btn" onclick="startGame(60)"><span class="duration">1 Menit</span><span class="label">Standar</span></button>
+            <button class="time-btn" onclick="startGame(120)"><span class="duration">2 Menit</span><span class="label">Tantangan Penuh</span></button>
+          </div>
+          <div class="instruction-box">
+            Ada 5 angka acuan di bagian atas (A, B, C, D, E).<br>
+            Di bawahnya, ada 5 angka yang diacak, satu angka hilang (ditandai <b>?</b>).<br>
+            Tugasmu menebak, angka yang hilang itu ada di posisi huruf apa pada acuan.
+          </div>
+          <button class="btn-riwayat" onclick="goToHistory()">Lihat Riwayat Bermain</button>
+        </div>
+
+        <!-- SCREEN 2: GAMEPLAY -->
+        <div id="screen-game" class="screen">
+          
+          <div class="game-topbar">
+            <div class="game-title">Kecermatan Angka Hilang</div>
+            <div class="timer-text" id="timerText">45s</div>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+
+          <!-- KOTAK ACUAN (TANPA BADGE) -->
+          <div class="acuan-box" id="acuanBox">
+            <div class="acuan-col"><div class="acuan-num" id="acuan-0">-</div><div class="acuan-label">A</div></div>
+            <div class="acuan-col"><div class="acuan-num" id="acuan-1">-</div><div class="acuan-label">B</div></div>
+            <div class="acuan-col"><div class="acuan-num" id="acuan-2">-</div><div class="acuan-label">C</div></div>
+            <div class="acuan-col"><div class="acuan-num" id="acuan-3">-</div><div class="acuan-label">D</div></div>
+            <div class="acuan-col"><div class="acuan-num" id="acuan-4">-</div><div class="acuan-label">E</div></div>
+          </div>
+
+          <div class="soal-box">
+            <!-- Tanda # dihilangkan di JS -->
+            <div class="soal-title" id="soalNumber">SOAL 1</div>
+            <div class="soal-numbers" id="soalNumbers"></div>
+          </div>
+
+          <div class="pilihan-box">
+            <div class="pilihan-title">PILIH JAWABAN ANDA</div>
+            <div class="pilihan-buttons" id="optionsBox"></div>
+          </div>
+
+        </div>
+
+        <!-- SCREEN 3: RIWAYAT -->
+        <div id="screen-history" class="screen">
+          <h3 class="menu-title">Riwayat Bermain</h3>
+          <div class="history-list" id="historyList"></div>
+          <button class="btn-back-menu" onclick="showScreen('menu')">Kembali ke Menu</button>
+        </div>
+
+        <!-- MODAL HASIL -->
+        <div class="modal-result" id="modalResult">
+          <div class="result-box">
+            <h2>Waktu Habis!</h2>
+            <div class="result-score" id="resultScore">0</div>
+            <div class="result-stats">
+              <div>Benar <span id="resultCorrect" style="color: var(--success)">0</span></div>
+              <div>Salah <span id="resultWrong" style="color: var(--danger)">0</span></div>
+              <div>Akurasi <span id="resultAccuracy">0%</span></div>
+            </div>
+            <div class="result-actions">
+              <button class="btn-play-again" onclick="playAgain()">Main Lagi</button>
+              <button class="btn-menu" onclick="closeResultAndMenu()">Menu Utama</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="side-banner" id="bannerRight"></div>
+
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <p>© 2026 BrainUp - Bimbel & Platform TryOut.</p>
+      <p style="font-size: 0.75rem; opacity: 0.7;">Membangun masa depan, satu tryout dalam satu waktu.</p>
+    </div>
+  </footer>
+
+  <button onclick="bukaModalWa()" class="float-wa" title="Hubungi Admin">
+    <svg viewBox="0 0 24 24"><path d="M12.031 2C6.51 2 2.014 6.496 2.014 12.017c0 1.766.461 3.49 1.336 5.012L2 22l5.108-1.338A9.968 9.968 0 0012.03 22c5.521 0 10.017-4.496 10.017-10.017S17.552 2 12.031 2zm5.223 14.03c-.222.625-1.286 1.196-1.762 1.242-.476.047-1.065.21-3.488-1.007-2.914-1.466-4.763-4.478-4.908-4.68-.144-.203-1.166-1.554-1.166-2.966 0-1.412.735-2.104 1.003-2.392.268-.288.587-.36.783-.36.196 0 .392.004.563.013.183.01.43-.07.67.515.245.595.833 2.053.908 2.203.075.15.125.325.025.525-.1.2-.375.604-.6.83-.225.225-.35.375-.225.6.125.225.556.917 1.192 1.486.816.728 1.504.955 1.717 1.062.212.107.338.088.463-.054.125-.142.535-.625.678-.838.143-.213.286-.178.48-.104.195.074 1.238.584 1.45.69.212.107.35.16.4.25.05.09.05.522-.172 1.147z"/></svg>
+  </button>
+
+  <div class="modal-overlay" id="modalWa">
+    <div class="modal-box">
+      <h3>Konsultasi Bimbel</h3>
+      <p>Isi data singkat ini agar Admin kami bisa memberikan rekomendasi terbaik untukmu.</p>
+      
+      <form id="formWa" onsubmit="kirimWa(event)">
+        <div class="form-group">
+          <label>Nama Lengkap</label>
+          <input type="text" id="waNama" placeholder="Masukkan nama Anda" required>
+        </div>
+        <div class="form-group">
+          <label>Asal Kota / Sekolah</label>
+          <input type="text" id="waAsal" placeholder="Contoh: SMAN 1 Jakarta" required>
+        </div>
+        <div class="form-group">
+          <label>Pilihan Program</label>
+          <select id="waProgram" required>
+            <option value="" disabled selected>Pilih program...</option>
+            <option value="Bimbel Reguler">Bimbel Reguler</option>
+            <option value="Bimbel Privat">Bimbel Privat (1-on-1)</option>
+            <option value="Kelas Online / Zoom">Kelas Online / Zoom</option>
+            <option value="TryOut & Pembahasan">Beli Paket TryOut</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Target / Kelas</label>
+          <select id="waTarget" required>
+            <option value="" disabled selected>Pilih target...</option>
+            <option value="POLRI">POLRI (Bintara/Tamtama/Akpol)</option>
+            <option value="CPNS">CPNS</option>
+            <option value="Kedinasan (STAN/STIS/IPDN)">Kedinasan (STAN/STIS/IPDN)</option>
+            <option value="TNI">TNI (AD / AL / AU)</option>
+            <option value="Sekolah Kedinasan Lain">Sekolah Kedinasan Lain</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-wa-kirim">Kirim & Chat Admin</button>
+        <button type="button" class="btn-tutup" onclick="tutupModalWa()">Batal</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // CAROUSEL BANNER
+    // ==========================================
+    const postersLeft = [
+      'https://i.imgur.com/3PYrXF0.png',
+      'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop'
+    ];
+    const postersRight = [
+      'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop'
+    ];
+    let currentLeftIndex = 0;
+    let currentRightIndex = 0;
+    const bannerLeftEl = document.getElementById('bannerLeft');
+    const bannerRightEl = document.getElementById('bannerRight');
+
+    function changeBanners() {
+      bannerLeftEl.style.backgroundImage = `url('${postersLeft[currentLeftIndex]}')`;
+      currentLeftIndex = (currentLeftIndex + 1) % postersLeft.length;
+      bannerRightEl.style.backgroundImage = `url('${postersRight[currentRightIndex]}')`;
+      currentRightIndex = (currentRightIndex + 1) % postersRight.length;
+    }
+    changeBanners();
+    setInterval(changeBanners, 5000); 
+
+    // ==========================================
+    // LOGIKA GAME
+    // ==========================================
+    let state = {
+      timeLimit: 45, timeLeft: 45, score: 0, correct: 0, wrong: 0,
+      isPlaying: false, timerInterval: null,
+      acuanAngka: [], soalAngka: [], jawabanBenarIndex: -1,
+      soalCount: 1, isAnswering: false
+    };
+
+    const el = {
+      timerText: document.getElementById('timerText'),
+      progressBar: document.getElementById('progressBar'),
+      soalNumber: document.getElementById('soalNumber'),
+      soalNumbers: document.getElementById('soalNumbers'),
+      optionsBox: document.getElementById('optionsBox'),
+      acuanBox: [document.getElementById('acuan-0'), document.getElementById('acuan-1'), document.getElementById('acuan-2'), document.getElementById('acuan-3'), document.getElementById('acuan-4')],
+      modalResult: document.getElementById('modalResult'),
+      historyList: document.getElementById('historyList')
+    };
+
+    function saveGameState() {
+      if (state.isPlaying) {
+        localStorage.setItem('brainup_kecermatan_state', JSON.stringify(state));
+      } else {
+        localStorage.removeItem('brainup_kecermatan_state');
+      }
+    }
+
+    function loadGameState() {
+      const saved = localStorage.getItem('brainup_kecermatan_state');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.isPlaying) {
+            state = parsed;
+            if (state.timeLeft <= 0) {
+              state.isPlaying = false;
+              endGame();
+            } else {
+              showScreen('game');
+              updateAcuanUI();
+              renderQuestionUI();
+              updateTimerUI();
+              clearInterval(state.timerInterval);
+              state.timerInterval = setInterval(() => {
+                state.timeLeft--;
+                updateTimerUI();
+                saveGameState(); 
+                if (state.timeLeft <= 0) endGame();
+              }, 1000);
+            }
+          }
+        } catch (e) {
+          localStorage.removeItem('brainup_kecermatan_state');
+        }
+      }
+    }
+
+    function showScreen(name) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-' + name).classList.add('active');
+      if (name === 'history') renderHistory();
+    }
+
+    function goToHistory() { showScreen('history'); }
+
+    function startGame(seconds) {
+      state.timeLimit = seconds;
+      state.timeLeft = seconds;
+      state.score = 0;
+      state.correct = 0;
+      state.wrong = 0;
+      state.isPlaying = true;
+      state.soalCount = 1;
+      
+      let arr = [];
+      while(arr.length < 5){
+        let r = Math.floor(Math.random() * 10); 
+        if(arr.indexOf(r) === -1) arr.push(r);
+      }
+      state.acuanAngka = arr;
+      
+      showScreen('game');
+      updateAcuanUI();
+      nextQuestion();
+      saveGameState(); 
+
+      clearInterval(state.timerInterval);
+      state.timerInterval = setInterval(() => {
+        state.timeLeft--;
+        updateTimerUI();
+        saveGameState(); 
+        if (state.timeLeft <= 0) endGame();
+      }, 1000);
+    }
+
+    function formatTime(sec) { return `${sec}s`; }
+
+    function updateTimerUI() {
+      el.timerText.innerText = formatTime(state.timeLeft);
+      if (state.timeLeft <= 10) {
+        el.timerText.classList.add('warning');
+      } else {
+        el.timerText.classList.remove('warning');
+      }
+      const percent = (state.timeLeft / state.timeLimit) * 100;
+      el.progressBar.style.width = `${percent}%`;
+    }
+
+    function updateAcuanUI() {
+      state.acuanAngka.forEach((num, i) => {
+        el.acuanBox[i].innerText = num;
+      });
+    }
+
+    function nextQuestion() {
+      state.isAnswering = false;
+      // Menghapus tanda '#' pada judul soal
+      el.soalNumber.innerText = `SOAL ${state.soalCount}`;
+      
+      let shuffled = [...state.acuanAngka].sort(() => Math.random() - 0.5);
+      const missingIndex = Math.floor(Math.random() * 5);
+      const missingNumber = shuffled[missingIndex];
+      state.soalAngka = [...shuffled];
+      state.jawabanBenarIndex = state.acuanAngka.indexOf(missingNumber);
+
+      el.soalNumbers.innerHTML = '';
+      shuffled.forEach((num, index) => {
+        const div = document.createElement('div');
+        div.className = 'soal-num';
+        if (index === missingIndex) {
+          div.classList.add('missing');
+          div.innerText = '?';
+        } else {
+          div.innerText = num;
+        }
+        el.soalNumbers.appendChild(div);
+      });
+
+      renderOptions();
+    }
+
+    function renderQuestionUI() {
+      if (state.soalAngka && state.soalAngka.length) {
+        el.soalNumber.innerText = `SOAL ${state.soalCount}`;
+        el.soalNumbers.innerHTML = '';
+        state.soalAngka.forEach((num, index) => {
+          const div = document.createElement('div');
+          div.className = 'soal-num';
+          div.innerText = num;
+          el.soalNumbers.appendChild(div);
+        });
+        renderOptions();
+      }
+    }
+
+    function renderOptions() {
+      el.optionsBox.innerHTML = '';
+      const labels = ['A', 'B', 'C', 'D', 'E'];
+      labels.forEach((label, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.innerText = label;
+        btn.onclick = () => answerQuestion(index, btn);
+        el.optionsBox.appendChild(btn);
+      });
+    }
+
+    function answerQuestion(choiceIndex, btnElement) {
+      if (!state.isPlaying || state.isAnswering) return;
+      state.isAnswering = true;
+
+      if (choiceIndex === state.jawabanBenarIndex) {
+        state.correct++;
+        btnElement.classList.add('benar');
+      } else {
+        state.wrong++;
+        btnElement.classList.add('salah');
+        const correctBtn = el.optionsBox.children[state.jawabanBenarIndex];
+        if (correctBtn) correctBtn.classList.add('benar');
+      }
+
+      state.score = state.correct;
+      state.soalCount++;
+      saveGameState();
+
+      setTimeout(() => {
+        if (state.isPlaying) nextQuestion();
+      }, 200); 
+    }
+
+    function endGame() {
+      state.isPlaying = false;
+      clearInterval(state.timerInterval);
+      localStorage.removeItem('brainup_kecermatan_state');
+      
+      const total = state.correct + state.wrong;
+      const accuracy = total > 0 ? Math.round((state.correct / total) * 100) : 0;
+      
+      document.getElementById('resultScore').innerText = state.score;
+      document.getElementById('resultCorrect').innerText = state.correct;
+      document.getElementById('resultWrong').innerText = state.wrong;
+      document.getElementById('resultAccuracy').innerText = accuracy + '%';
+      
+      el.modalResult.classList.add('active');
+      saveHistory(state.timeLimit, state.score, state.correct, state.wrong, accuracy);
+    }
+
+    function playAgain() {
+      el.modalResult.classList.remove('active');
+      startGame(state.timeLimit);
+    }
+
+    function closeResultAndMenu() {
+      el.modalResult.classList.remove('active');
+      showScreen('menu');
+    }
+
+    function saveHistory(duration, score, correct, wrong, accuracy) {
+      try {
+        const savedHistory = JSON.parse(localStorage.getItem('brainup_kecermatan_history') || '[]');
+        const newEntry = {
+          id: Date.now(),
+          date: new Date().toLocaleString('id-ID', { 
+            day: '2-digit', month: 'short', year: 'numeric', 
+            hour: '2-digit', minute: '2-digit' 
+          }),
+          duration: duration, score: score,
+          correct: correct, wrong: wrong, accuracy: accuracy
+        };
+        savedHistory.unshift(newEntry);
+        if (savedHistory.length > 20) savedHistory.pop();
+        localStorage.setItem('brainup_kecermatan_history', JSON.stringify(savedHistory));
+      } catch (e) { console.error("Gagal menyimpan riwayat:", e); }
+    }
+
+    function renderHistory() {
+      let savedHistory = [];
+      try {
+        savedHistory = JSON.parse(localStorage.getItem('brainup_kecermatan_history') || '[]');
+      } catch (e) { console.error("Gagal membaca riwayat:", e); }
+      
+      if (!savedHistory || savedHistory.length === 0) {
+        el.historyList.innerHTML = `<div class="history-empty">Belum ada riwayat bermain.<br>Ayo mulai bermain!</div>`;
+        return;
+      }
+
+      let html = '';
+      savedHistory.forEach(item => {
+        const durationText = item.duration === 45 ? '45 Detik' : (item.duration === 60 ? '1 Menit' : '2 Menit');
+        html += `
+          <div class="history-item">
+            <div class="history-info">
+              <div class="h-date">${item.date}</div>
+              <div class="h-type">Waktu: ${durationText} | Akurasi: ${item.accuracy}%</div>
+            </div>
+            <div class="history-score">${item.score}</div>
+          </div>
+        `;
+      });
+      el.historyList.innerHTML = html;
+    }
+
+    // ==========================================
+    // MODAL WA
+    // ==========================================
+    function bukaModalWa() { document.getElementById('modalWa').classList.add('active'); }
+    function tutupModalWa() { document.getElementById('modalWa').classList.remove('active'); }
+    document.getElementById('modalWa').addEventListener('click', function(e) { 
+      if (e.target === this) { tutupModalWa(); } 
+    });
+
+    function kirimWa(event) {
+      event.preventDefault(); 
+      const NOMOR_WA_ADMIN = "62895615420009"; 
+      const nama = document.getElementById('waNama').value;
+      const asal = document.getElementById('waAsal').value;
+      const program = document.getElementById('waProgram').value;
+      const target = document.getElementById('waTarget').value;
+      const pesan = `Halo Admin BrainUp,%0A%0ASaya ingin konsultasi mengenai bimbel.%0A%0A*Nama:* ${nama}%0A*Asal/Kota:* ${asal}%0A*Program:* ${program}%0A*Target:* ${target}%0A%0AMohon info selengkapnya ya Kak. Terima kasih!`;
+      const urlWa = `https://wa.me/${NOMOR_WA_ADMIN}?text=${pesan}`;
+      window.open(urlWa, '_blank');
+      tutupModalWa();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadGameState();
+    });
+  </script>
+
+</body>
+</html>
